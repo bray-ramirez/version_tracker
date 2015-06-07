@@ -1,0 +1,105 @@
+#!/usr/bin/env ruby
+require 'optparse'
+require 'version_tracker/bumper'
+
+
+module COMMANDS
+  INIT = 'init'
+  SET = 'set'
+  BUMP = 'bump'
+end
+
+
+module PARTS
+  MAJOR = 'major'
+  MINOR = 'minor'
+  PATCH = 'patch'
+end
+
+
+options = {}
+
+option_parser =
+  OptionParser.new do |opts|
+    opts.banner = <<BANNER
+    'Manages Rails Application Version'
+
+USAGE:
+  version_tracker init        # Initialize VERSION File to 0.0.0
+  version_tracker set [value] # Set VERSION to value
+  version_tracker bump [part] # Bump VERSION based on part. Valid part: major, minor, patch. Default: patch
+
+OPTIONS:
+BANNER
+
+    opts.on('--commit') do
+      options[:commit] = true
+    end
+
+
+    opts.on('--branch=BRANCH') do |branch|
+      options[:branch] = branch
+    end
+
+
+    opts.on('--tag') do
+      options[:tag] = true
+    end
+
+
+    opts.on('-h', '--help', 'Help') do
+      puts opts
+      exit
+    end
+
+  end
+
+option_parser.parse!
+
+
+version_tracker = VersionTracker::Bumper.new
+
+
+if ARGV.first == COMMANDS::INIT
+  version_tracker.generate
+  puts version_tracker.version
+elsif ARGV.first == COMMANDS::SET
+  version_tracker.set ARGV[1]
+  puts version_tracker.version
+elsif ARGV.first == COMMANDS::BUMP
+  case ARGV[1]
+  when PARTS::MAJOR
+    options[:part] = :major
+  when PARTS::MINOR
+    options[:part] = :minor
+  when PARTS::PATCH, nil
+    options[:part] = :patch
+  else
+    puts 'Invalid part'
+    puts option_parser
+    exit
+  end
+
+  version_tracker.bump options
+  puts version_tracker.version
+else
+  puts option_parser
+end
+
+exit
+
+
+# ARGV.each do |arg|
+#   if arg == COMMANDS::SET_VERSION
+#     options[:set_version] = true
+#     options[:version] =
+#     command_line.execute options
+#   else
+#     puts option_parser.to_s
+#     exit
+#   end
+# end
+
+
+# VersionTracker::CommandLine.new(options).
+# exit
