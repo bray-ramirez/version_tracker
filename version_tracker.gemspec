@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.license       = "MIT"
 
   spec.files         = Dir["{lib}/**/*.rb", "bin/*", "LICENSE", "*.md"]
-  spec.executables   = ['version_tracker']
+  spec.executables   = ['version']
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
