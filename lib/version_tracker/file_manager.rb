@@ -1,3 +1,6 @@
+require 'errors/version_tracker_error'
+
+
 module VersionTracker
 
   class FileManager
@@ -6,12 +9,12 @@ module VersionTracker
 
 
     def self.initialized?
-      return File.exist? FILENAME
+      File.exist? FILENAME
     end
 
 
     def self.read
-      raise 'VERSION File does not exist.' unless self.initialized?
+      raise VersionTrackerError, 'VERSION File does not exist.' unless self.initialized?
 
       File.read FILENAME
     end

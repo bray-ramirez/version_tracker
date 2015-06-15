@@ -17,7 +17,7 @@ describe VersionTracker::Bumper do
   end
 
 
-  describe '.new' do
+  describe '#version' do
     let(:version_tracker){ VersionTracker::Bumper.new }
 
 
@@ -26,7 +26,28 @@ describe VersionTracker::Bumper do
         let(:value){ version_tracker.version }
         let(:expected){ '0.0.0' }
       end
+    end
 
+
+    context 'with VERSION File' do
+      before do
+        VersionTracker::FileManager.write '1.2.3'
+      end
+
+
+      it_behaves_like 'read value' do
+        let(:value){ version_tracker.version }
+        let(:expected){ '1.2.3' }
+      end
+    end
+  end
+
+
+  describe '#parts' do
+    let(:version_tracker){ VersionTracker::Bumper.new }
+
+
+    context 'without VERSION File' do
       it_behaves_like 'read value' do
         let(:value){ version_tracker.parts[:major] }
         let(:expected){ 0 }
@@ -49,10 +70,6 @@ describe VersionTracker::Bumper do
         VersionTracker::FileManager.write '1.2.3'
       end
 
-      it_behaves_like 'read value' do
-        let(:value){ version_tracker.version }
-        let(:expected){ '1.2.3' }
-      end
 
       it_behaves_like 'read value' do
         let(:value){ version_tracker.parts[:major] }

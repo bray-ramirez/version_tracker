@@ -5,6 +5,7 @@
 #
 #
 
+require 'errors/version_tracker_error'
 require 'version_tracker/file_manager'
 
 
@@ -28,7 +29,8 @@ module VersionTracker
 
 
     def init version = nil
-      # TODO: Validate version
+      raise VersionTrackerError, 'Version format is invalid' if version && !(BASIC_FORMAT =~ version)
+
       FileManager.write version || self.version
     end
 
@@ -41,18 +43,18 @@ module VersionTracker
     #
     #
     def bump options = {}
-      raise 'Version File is not initialized' unless FileManager.initialized?
+      raise VersionTrackerError, 'Version File is not initialized' unless FileManager.initialized?
 
       part = options[:part] || :patch
 
       unless [:major, :minor, :patch].include?(part)
-        raise 'Invalid Part Parameter.'
+        raise VersionTrackerError, 'Invalid Part Parameter.'
       end
 
 
       value = options[:value]
       if value && !value.is_a?(Integer)
-        raise TypeError, 'Value should be of Integer Type'
+        raise VersionTrackerError, 'Value should be of Integer Type'
       end
 
       self.send "bump_#{part}".to_sym, value
@@ -78,13 +80,6 @@ module VersionTracker
 
 
     protected
-
-    def bump_version value
-      return 'Invalid Version Format.' if BASIC_FORMAT =~ value
-
-      FileManager.write value
-    end
-
 
     def bump_major value
       value = value || self.parts[:major] + 1

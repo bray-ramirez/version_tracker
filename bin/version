@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 require 'optparse'
-require 'version_tracker/bumper'
+require 'version_tracker/command_line'
 
 
 DEFAULT_COMMIT_MESSAGE = 'Set Version to'
@@ -61,75 +61,12 @@ BANNER
 option_parser.parse!
 
 
-version_tracker = VersionTracker::Bumper.new
-
 if ARGV.first.nil?
   puts option_parser
   exit
 end
 
-# TODO: Add Validation
-if ARGV.first == COMMANDS::INIT
-  version_tracker.init ARGV[1]
-  puts version_tracker.version
-elsif ARGV.first == COMMANDS::READ
-  puts version_tracker.version
-elsif ARGV.first == COMMANDS::TAG
-  system("git tag #{version_tracker.version}")
-  system("git push origin #{version_tracker.version}")
-elsif ARGV.first == COMMANDS::BUMP
-  case ARGV[1]
-  when PARTS::MAJOR
-    options[:part] = :major
-  when PARTS::MINOR
-    options[:part] = :minor
-  when PARTS::PATCH, nil
-    options[:part] = :patch
-  else
-    puts 'Invalid part'
-    puts option_parser
-    exit
-  end
 
-  version_tracker.bump options
-  puts version_tracker.version
-end
-
-
-if !!options[:release]
-  message = options[:message] unless options[:message].nil?
-  message = [DEFAULT_COMMIT_MESSAGE, version_tracker.version].join(' ') if message.nil?
-
-  branch = ['release', version_tracker.version].join '/'
-  exists = system("git rev-parse --verify #{branch}")
-
-  if exists
-    system("git checkout #{branch}")
-  else
-    system("git checkout -b #{branch}")
-  end
-
-  system('git add VERSION')
-  system("git commit -m '#{message}'")
-
-  system("git push origin #{branch}")
-
-  exit
-end
-
-
-
-if !!options[:push]
-  message = options[:message] unless options[:message].nil?
-  message = [DEFAULT_COMMIT_MESSAGE, version_tracker.version].join(' ') if message.nil?
-
-  system('git add VERSION')
-  system("git commit -m '#{message}'")
-
-  result = `git rev-parse --aabrev-ref HEAD`
-  branch = result.gsub(/\n/, '')
-
-  system("git push origin #{branch}")
-
-  exit
-end
+result, status = VersionTracker::CommandLine.new(ARGV, options).execute
+puts result
+exit status

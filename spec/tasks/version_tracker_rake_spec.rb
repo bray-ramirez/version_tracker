@@ -36,7 +36,7 @@ describe 'version_tracker rake task' do
   describe 'version_tracker:bump_major' do
     before :all do
       File.delete('VERSION') if VersionTracker::FileManager.initialized?
-      VersionTracker::Bumper.new.generate '0.2.1'
+      VersionTracker::Bumper.new.init '0.2.1'
       Rake::Task['version_tracker:bump_major'].invoke
     end
 
@@ -49,7 +49,7 @@ describe 'version_tracker rake task' do
   describe 'version_tracker:bump_minor' do
     before :all do
       File.delete('VERSION') if VersionTracker::FileManager.initialized?
-      VersionTracker::Bumper.new.generate '2.3.2'
+      VersionTracker::Bumper.new.init '2.3.2'
       Rake::Task['version_tracker:bump_minor'].invoke
     end
 
@@ -62,7 +62,7 @@ describe 'version_tracker rake task' do
   describe 'version_tracker:bump_patch' do
     before :all do
       File.delete('VERSION') if VersionTracker::FileManager.initialized?
-      VersionTracker::Bumper.new.generate '2.3.2'
+      VersionTracker::Bumper.new.init '2.3.2'
       Rake::Task['version_tracker:bump_patch'].invoke
     end
 

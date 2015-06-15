@@ -1,0 +1,2 @@
+class VersionTrackerError < StandardError
+end

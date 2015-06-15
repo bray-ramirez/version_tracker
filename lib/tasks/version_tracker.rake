@@ -14,7 +14,7 @@ namespace :version_tracker do
 
   desc 'Initialize Version'
   task :initialize do
-    VersionTracker::Bumper.new.generate
+    VersionTracker::Bumper.new.init
   end
 
 
