@@ -31,7 +31,7 @@ module VersionTracker
     def init version = nil
       raise VersionTrackerError, 'Version format is invalid' if version && !(BASIC_FORMAT =~ version)
 
-      FileManager.write version || self.version
+      FileManager.write(version || INITIAL_VERSION)
     end
 
 
@@ -62,7 +62,9 @@ module VersionTracker
 
 
     def version
-      (FileManager.read if FileManager.initialized?) || INITIAL_VERSION
+      raise VersionTrackerError, 'Version File is not initialized' unless FileManager.initialized?
+
+      FileManager.read
     end
 
 

@@ -22,9 +22,8 @@ describe VersionTracker::Bumper do
 
 
     context 'without VERSION File' do
-      it_behaves_like 'read value' do
-        let(:value){ version_tracker.version }
-        let(:expected){ '0.0.0' }
+      it 'raises an error' do
+        expect { version_tracker.bump }.to raise_error
       end
     end
 
@@ -48,19 +47,18 @@ describe VersionTracker::Bumper do
 
 
     context 'without VERSION File' do
-      it_behaves_like 'read value' do
-        let(:value){ version_tracker.parts[:major] }
-        let(:expected){ 0 }
+      it 'raises an error' do
+        expect { version_tracker.parts[:major] }.to raise_error
       end
 
-      it_behaves_like 'read value' do
-        let(:value){ version_tracker.parts[:minor] }
-        let(:expected){ 0 }
+
+      it 'raises an error' do
+        expect { version_tracker.parts[:minor] }.to raise_error
       end
 
-      it_behaves_like 'read value' do
-        let(:value){ version_tracker.parts[:patch] }
-        let(:expected){ 0 }
+
+      it 'raises an error' do
+        expect { version_tracker.parts[:patch] }.to raise_error
       end
     end
 

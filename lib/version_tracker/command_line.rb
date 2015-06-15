@@ -68,7 +68,7 @@ module VersionTracker
 
     def bump
       part = @options[:argument] || DEFAULT_PART
-      raise VersionTrackerError, 'Invalid Part' if VALID_PARTS.include?(part)
+      raise VersionTrackerError, 'Invalid Part' unless VALID_PARTS.include?(part)
 
       @version_tracker.bump :part => part.to_sym
     end
