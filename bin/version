@@ -3,23 +3,6 @@ require 'optparse'
 require 'version_tracker/command_line'
 
 
-DEFAULT_COMMIT_MESSAGE = 'Set Version to'
-
-module COMMANDS
-  INIT = 'init'
-  BUMP = 'bump'
-  READ = 'read'
-  TAG = 'tag'
-end
-
-
-module PARTS
-  MAJOR = 'major'
-  MINOR = 'minor'
-  PATCH = 'patch'
-end
-
-
 options = {}
 
 option_parser =
