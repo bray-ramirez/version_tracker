@@ -27,19 +27,9 @@ module VersionTracker
     end
 
 
-    def generate version = nil
+    def init version = nil
       # TODO: Validate version
-      raise 'VERSION File already exists.' if FileManager.initialized?
-
       FileManager.write version || self.version
-    end
-
-
-    def set version = nil
-      # TODO: Validate version
-      raise 'Version is required.' if version.nil?
-
-      FileManager.write version
     end
 
 
@@ -51,6 +41,8 @@ module VersionTracker
     #
     #
     def bump options = {}
+      raise 'Version File is not initialized' unless FileManager.initialized?
+
       part = options[:part] || :patch
 
       unless [:major, :minor, :patch].include?(part)

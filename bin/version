@@ -7,7 +7,6 @@ DEFAULT_COMMIT_MESSAGE = 'Set Version to'
 
 module COMMANDS
   INIT = 'init'
-  SET = 'set'
   BUMP = 'bump'
   READ = 'read'
   TAG = 'tag'
@@ -29,11 +28,10 @@ option_parser =
     'Manages Rails Application Version'
 
 USAGE:
-  version init        # Initialize VERSION File to 0.0.0
-  version read        # Read current VERSION
-  version set [value] # Set VERSION to value
-  version bump [part] # Bump VERSION based on part. Valid part: major, minor, patch. Default: patch
-  version tag         # Tag using current VERSION
+  version init [value]  # Initialize VERSION File with provided value. Default: 0.0.0 if value is not provided and VERSION File does not exist
+  version read          # Read current VERSION
+  version bump [part]   # Bump VERSION based on part. Valid part: major, minor, patch. Default: patch
+  version tag           # Tag using current VERSION
 
 OPTIONS:
 BANNER
@@ -72,10 +70,7 @@ end
 
 # TODO: Add Validation
 if ARGV.first == COMMANDS::INIT
-  version_tracker.generate
-  puts version_tracker.version
-elsif ARGV.first == COMMANDS::SET
-  version_tracker.set ARGV[1]
+  version_tracker.init ARGV[1]
   puts version_tracker.version
 elsif ARGV.first == COMMANDS::READ
   puts version_tracker.version

@@ -72,55 +72,28 @@ describe VersionTracker::Bumper do
   end
 
 
-  describe '#generate' do
-    context 'without VERSION File' do
-      context 'with no initial value' do
-        before do
-          VersionTracker::Bumper.new.generate
-        end
-
-
-        it_behaves_like 'read version' do
-          let(:expected){ '0.0.0' }
-        end
-      end
-
-
-      context 'with initial value' do
-        before do
-          VersionTracker::Bumper.new.generate '1.2.3'
-        end
-
-
-        it_behaves_like 'read version' do
-          let(:expected){ '1.2.3' }
-        end
-      end
-    end
-
-
-    context 'with VERSION File' do
+  describe '#init' do
+    context 'with version parameter' do
       before do
-        VersionTracker::FileManager.write '1.2.3'
+        VersionTracker::Bumper.new.init '1.2.3'
       end
 
 
-      it 'raises an error' do
-        expect { VersionTracker::Bumper.new.generate }.to raise_error
+      it_behaves_like 'read version' do
+        let(:expected){ '1.2.3' }
       end
     end
-  end
 
 
-  describe '#set' do
-    before do
-      VersionTracker::FileManager.write '0.0.0'
-      VersionTracker::Bumper.new.set '1.2.3'
-    end
+    context 'without version parameter' do
+      before do
+        VersionTracker::Bumper.new.init
+      end
 
 
-    it_behaves_like 'read version' do
-      let(:expected){ '1.2.3' }
+      it_behaves_like 'read version' do
+        let(:expected){ '0.0.0' }
+      end
     end
   end
 
@@ -128,9 +101,17 @@ describe VersionTracker::Bumper do
   describe '#bump' do
     let(:version_tracker){ VersionTracker::Bumper.new }
 
+
+    context 'withou VERSION File initialized' do
+      it 'raises an error' do
+        expect { version_tracker.bump }.to raise_error
+      end
+    end
+
+
     context 'without parameters' do
       before do
-        version_tracker.generate '1.2.3'
+        version_tracker.init '1.2.3'
         version_tracker.bump
       end
 
@@ -143,7 +124,7 @@ describe VersionTracker::Bumper do
 
     context 'with value option only' do
       before do
-        version_tracker.generate '1.2.3'
+        version_tracker.init '1.2.3'
         version_tracker.bump :value => 9
       end
 
@@ -157,7 +138,7 @@ describe VersionTracker::Bumper do
     context 'with options' do
       context 'with major part parameter' do
         before do
-          version_tracker.generate '1.2.3'
+          version_tracker.init '1.2.3'
           version_tracker.bump :part => :major
         end
 
@@ -170,7 +151,7 @@ describe VersionTracker::Bumper do
 
       context 'with major part and value parameters' do
         before do
-          version_tracker.generate '1.2.3'
+          version_tracker.init '1.2.3'
           version_tracker.bump :part => :major, :value => 5
         end
 
@@ -183,7 +164,7 @@ describe VersionTracker::Bumper do
 
       context 'with minor part parameter' do
         before do
-          version_tracker.generate '1.2.3'
+          version_tracker.init '1.2.3'
           version_tracker.bump :part => :minor
         end
 
@@ -196,7 +177,7 @@ describe VersionTracker::Bumper do
 
       context 'with minor part and value parameters' do
         before do
-          version_tracker.generate '1.2.3'
+          version_tracker.init '1.2.3'
           version_tracker.bump :part => :minor, :value => 5
         end
 
@@ -210,7 +191,7 @@ describe VersionTracker::Bumper do
 
     context 'with patch part parameter' do
       before do
-        version_tracker.generate '1.2.3'
+        version_tracker.init '1.2.3'
         version_tracker.bump :part => :patch
       end
 
@@ -223,7 +204,7 @@ describe VersionTracker::Bumper do
 
     context 'with patch part and value parameters' do
       before do
-        version_tracker.generate '1.2.3'
+        version_tracker.init '1.2.3'
         version_tracker.bump :part => :patch, :value => 5
       end
 
