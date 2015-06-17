@@ -8,7 +8,7 @@ options = {}
 option_parser =
   OptionParser.new do |opts|
     opts.banner = <<BANNER
-    'Manages Rails Application Version'
+Version Tracker: Manages Rails Application Version
 
 USAGE:
   version init [value]  # Initialize VERSION File with provided value. Default: 0.0.0 if value is not provided and VERSION File does not exist
@@ -44,12 +44,14 @@ BANNER
 option_parser.parse!
 
 
-if ARGV.first.nil?
-  puts option_parser
-  exit
-end
+# if ARGV.first.nil?
+#   puts option_parser
+#   exit
+# end
 
+result, status = VersionTracker::CommandLine.new.execute ARGV, options
 
-result, status = VersionTracker::CommandLine.new(ARGV, options).execute
 puts result
+puts option_parser if status == VersionTracker::CommandLine::RESULT_STATUS::ERROR
+
 exit status
