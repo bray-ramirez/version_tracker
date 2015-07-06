@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = VersionTracker::VERSION
   spec.authors       = ["Braymon Ramirez"]
   spec.email         = ["braymon.ramirez@gmail.com"]
-  spec.summary       = ""
-  spec.description   = ""
-  spec.homepage      = ""
+  spec.summary       = "Provides command line and rake tasks to bump versions of your Rails Applications"
+  spec.description   = "Add Version to your Rails Application"
+  spec.homepage      = "https://github.com/brayramirez/version_tracker"
   spec.license       = "MIT"
 
   spec.files         = Dir["{lib}/**/*.rb", "bin/*", "LICENSE", "*.md"]
