@@ -1,7 +1,7 @@
 require 'version_tracker'
 require 'rails'
 
-module MyPlugin
+module VersionTracker
 
   class Railtie < Rails::Railtie
     railtie_name :version_tracker
