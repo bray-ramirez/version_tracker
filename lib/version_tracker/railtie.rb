@@ -7,7 +7,7 @@ module VersionTracker
     railtie_name :version_tracker
 
     rake_tasks do
-      load Dir["lib/tasks/version_tracker.rake"]
+      load "tasks/version_tracker.rake"
     end
   end
 
