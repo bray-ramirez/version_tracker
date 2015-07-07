@@ -43,12 +43,6 @@ BANNER
 
 option_parser.parse!
 
-
-# if ARGV.first.nil?
-#   puts option_parser
-#   exit
-# end
-
 result, status = VersionTracker::CommandLine.new.execute ARGV, options
 
 puts result

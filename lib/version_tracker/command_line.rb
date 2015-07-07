@@ -32,7 +32,7 @@ module VersionTracker
 
 
     def execute args = [], options = {}
-      command = args[0]
+      command = args[0] || COMMANDS::READ
       raise VersionTrackerError, 'Invalid command' unless VALID_COMMANDS.include?(command)
 
       @options = options.merge(:argument => args[1])
