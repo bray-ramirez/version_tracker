@@ -4,6 +4,6 @@ require 'version_tracker/file_manager'
 
 module VersionTracker
 
-  require 'my_plugin/railtie' if defined?(Rails)
+  require 'version_tracker/railtie' if defined?(Rails)
 
 end
