@@ -23,9 +23,9 @@ Or install it yourself as:
 
 ### Using Command Line
 ```
+version [read]        # Read current VERSION
 version init [value]  # Initialize VERSION File with provided value.
                       # Default: 0.0.0 if value is not provided and VERSION File does not exist
-version read          # Read current VERSION
 version bump [part]   # Bump VERSION based on part. Valid part: major, minor, patch. Default: patch
 version tag           # Tag using current VERSION
   
