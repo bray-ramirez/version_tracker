@@ -48,6 +48,5 @@ option_parser.parse!
 result, status = VersionTracker::CommandLine.new.execute ARGV, options
 
 puts result
-puts option_parser if status == VersionTracker::CommandLine::RESULT_STATUS::ERROR
 
 exit status

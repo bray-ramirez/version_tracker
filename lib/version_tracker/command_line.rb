@@ -85,20 +85,17 @@ module VersionTracker
 
 
     def release
+      origin_branch = self.current_branch
       branch = ['release', @version_tracker.version].join '/'
-
       exists = system "git rev-parse --quiet --verify #{branch}"
-      create_branch = '-b' unless exists
 
-      system ['git', 'checkout', create_branch, branch].join(' ')
-      self.git_commit branch
+      self.checkout branch, :create => !exists
+      self.git_push branch, origin_branch, :create => !exists
     end
 
 
     def push
-      result = `git rev-parse --abbrev-ref HEAD`
-      branch = result.gsub /\n/, ''
-      self.git_commit branch
+      self.git_push self.current_branch
     end
 
 
@@ -107,10 +104,37 @@ module VersionTracker
     end
 
 
-    def git_commit branch
+    def git_push branch, origin_branch = nil, options = {:create => false}
       system 'git add VERSION'
       system "git commit -m '#{self.message}'"
-      system "git push origin #{branch}"
+
+      return if system("git push origin #{branch}")
+
+      self.revert_branch(origin_branch) unless origin_branch == branch
+      self.delete_branch branch if !!options[:create]
+      raise VersionTrackerError, 'Error encountered while pushing to git'
+    end
+
+
+    def current_branch
+      result = `git rev-parse --abbrev-ref HEAD`
+      result.gsub /\n/, ''
+    end
+
+
+    def checkout branch, options = {:create => false}
+      create_branch = '-b' if !!options[:create]
+      system ['git', 'checkout', create_branch, branch].join(' ')
+    end
+
+
+    def revert_branch branch
+      self.checkout branch
+    end
+
+
+    def delete_branch branch
+      system "git branch -D #{branch}"
     end
 
   end
