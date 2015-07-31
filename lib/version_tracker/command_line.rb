@@ -87,7 +87,7 @@ module VersionTracker
     def release
       branch = ['release', @version_tracker.version].join '/'
 
-      exists = system "git rev-parse --verify #{branch}"
+      exists = system "git rev-parse --quiet --verify #{branch}"
       create_branch = '-b' unless exists
 
       system ['git', 'checkout', create_branch, branch].join(' ')
